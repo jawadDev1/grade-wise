@@ -1,0 +1,59 @@
+import { connect, connection } from "mongoose";
+
+const URL = process.env.MONGODB_URI || "mongodb://localhost:27017/gradewise";
+
+const Connect = async () => {
+  await connect(URL);
+};
+
+connection.on("connected", () => console.log("connected to db"));
+
+connection.on("error", (err) => console.error("Mongodb Error:", err.message));
+
+export { Connect };
+
+// import mongoose from "mongoose";
+
+// const MONGODB_URI = process.env.MONGODB_URI;
+
+// if (!MONGODB_URI) {
+//   throw new Error("Please define the MONGODB_URI environment variable");
+// }
+
+// let cached = global.mongoose;
+
+// if (!cached) {
+//   cached = global.mongoose = { conn: null, promise: null };
+// }
+
+// export async function Connect() {
+//   if (cached.conn) {
+//     return cached.conn;
+//   }
+
+//   if (!cached.promise) {
+//     const opts = {
+//       bufferCommands: false,
+//     };
+
+//     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+//       mongoose.connection.on("connected", () =>
+//         console.log("Connected to MongoDB")
+//       );
+//       mongoose.connection.on("error", (err) =>
+//         console.error("MongoDB Error:", err.message)
+//       );
+//       return mongoose;
+//     });
+//   }
+
+//   try {
+//     cached.conn = await cached.promise;
+//     return cached.conn;
+//   } catch (e) {
+//     cached.promise = null;
+//     throw e;
+//   }
+// }
+
+// export default Connect;
