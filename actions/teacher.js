@@ -4,7 +4,7 @@ import { SERVICES } from "@/services";
 import { getServerSession } from "next-auth";
 
 import { parseText } from "@/lib/utils";
-import { createClass } from "@/services/teacher";
+import { createClass, deleteClass, updateClass } from "@/services/teacher";
 import { revalidatePath } from "next/cache";
 
 export const CREATE_ASSIGNMENT = async (data) => {
@@ -95,6 +95,24 @@ export const REVIEW_ASSIGNMENT = async ({
 
 export const CREATE_CLASS = async (data) => {
   const res = await createClass(data);
-  console.log("Res ========> ", res);
+
+  revalidatePath('/dashboard')
+
+  return await res.json();
+};
+
+export const UPDATE_CLASS = async (data, id) => {
+  const res = await updateClass(data, id);
+
+  revalidatePath(`/dashboard/classes/${id}`);
+
+  return await res.json();
+};
+
+export const DELETE_CLASS = async (id) => {
+  const res = await deleteClass(id);
+
+  revalidatePath(`/dashboard/classes`);
+
   return await res.json();
 };

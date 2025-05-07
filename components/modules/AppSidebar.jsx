@@ -35,7 +35,7 @@ const menuItems = {
   TEACHER: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: Home,
       description: "Overview of your classes and recent activities",
     },
@@ -88,10 +88,7 @@ export async function AppSidebar() {
           <NextLink href="/">
             <SidebarGroupLabel className="text-lg flex items-center gap-3 mb-3">
               <NextImage className="w-12 h-12" src="/icons/logo.svg" />
-              {/* <div className="flex flex-col"> */}
-                <Typography>GradeWise</Typography>
-                {/* <Typography className="capitalize text-sm">{role}</Typography> */}
-              {/* </div> */}
+              <Typography>GradeWise</Typography>
             </SidebarGroupLabel>
           </NextLink>
           <SidebarGroupContent className="grow">

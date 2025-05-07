@@ -30,10 +30,6 @@ export const authOptions = {
           email: profile.email,
         });
 
-        // Check if this is the first user
-        const usersCount = await SERVICES.AuthService.getUsersCount();
-        const defaultRole = usersCount === 0 ? "TEACHER" : "USER";
-
         if (!user?.email) {
           const user = await SERVICES.AuthService.registerUser({
             name: profile.name,
@@ -41,9 +37,8 @@ export const authOptions = {
             email: profile.email,
             profile: profile.picture,
             verification_type: "google",
-            role: defaultRole, // Set role based on users count
           });
-          return { ...googleProfile, role: defaultRole, id: user._id };
+          return { ...googleProfile, id: user._id };
         }
 
         const updatedUser = await SERVICES.AuthService.updateUser(
@@ -141,9 +136,11 @@ export const authOptions = {
       return session;
     },
 
-    async redirect({ baseUrl }) {
-      const redirectUrl = `${baseUrl}/`;
-      return redirectUrl;
+    async redirect({ url, baseUrl }) {
+      // If the URL starts with the base URL, then it's safe to return
+      if (url.startsWith(baseUrl)) return url;
+      // Otherwise, return to the baseUrl
+      return baseUrl;
     },
   },
 

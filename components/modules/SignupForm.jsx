@@ -20,32 +20,22 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import NextLink from "../common/NextLink";
+
+
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import { ACTIONS } from "@/actions";
 import { generateResponse } from "@/helpers/generateResponse";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import Spinner from "../common/Spinner";
+import { signupSchema } from "@/schemas/signupSchema";
 
-const signupSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(50, "Username is too long"),
-  email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(100, "Password is too long"),
-});
 
-export function SignupForm({ className, ...props }) {
+
+export function SignupForm({ className, handleFormChange, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -63,7 +53,7 @@ export function SignupForm({ className, ...props }) {
     const user = await response.json();
     setIsLoading(false);
     if (user.success) {
-      router.push("/login");
+      handleFormChange("login");
     }
   };
   return (
@@ -155,14 +145,11 @@ export function SignupForm({ className, ...props }) {
                 <GoogleIcon />
                 Continue with Google
               </Button>
-              <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <NextLink
-                  href="/login"
-                  className="underline underline-offset-4"
-                >
-                  Login
-                </NextLink>
+              <div
+                onClick={() => handleFormChange("login")}
+                className="mt-4 text-center text-sm cursor-pointer"
+              >
+                Already have an account? Login
               </div>
             </form>
           </Form>

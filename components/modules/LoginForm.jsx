@@ -20,25 +20,18 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import NextLink from "../common/NextLink";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
 import Spinner from "../common/Spinner";
+import { loginSchema } from "@/schemas/loginSchema";
 
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(100, "Password is too long"),
-});
-
-export function LoginForm({ className, ...props }) {
+export function LoginForm({ className, handleFormChange, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const router = useRouter();
   const { toast } = useToast();
   const form = useForm({
@@ -54,6 +47,7 @@ export function LoginForm({ className, ...props }) {
       setIsLoading(true);
       const response = await signIn("credentials", {
         redirect: false,
+        callbackUrl: callbackUrl,
         ...data,
       });
 
@@ -63,7 +57,7 @@ export function LoginForm({ className, ...props }) {
         title: "Signed In successfully.",
         description: "You are now logged in.",
       });
-      router.push("/dashboard");
+      router.push(callbackUrl);
     } catch (error) {
       if (error instanceof Error)
         toast({
@@ -135,20 +129,19 @@ export function LoginForm({ className, ...props }) {
                 className="w-full"
                 type="button"
                 onClick={() => {
-                  signIn("google");
+                  signIn("google", {
+                    callbackUrl,
+                  });
                 }}
               >
                 <GoogleIcon />
                 Continue with Google
               </Button>
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <NextLink
-                  href="/signup"
-                  className="underline underline-offset-4"
-                >
-                  Sign up
-                </NextLink>
+              <div
+                onClick={() => handleFormChange("signup")}
+                className="mt-4 text-center text-sm  cursor-pointer"
+              >
+                Don&apos;t have an account? Sign up
               </div>
             </form>
           </Form>

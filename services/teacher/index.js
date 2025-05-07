@@ -120,7 +120,7 @@ export const getAssignmentDetails = async ({ id, filters = [] }) => {
               as: "student",
             },
           },
-        ]
+        ],
       },
     },
     ...filters,
@@ -207,6 +207,48 @@ export const createClass = async (data) => {
     });
   } catch (error) {
     console.log("Error in createClass :: ", error);
+    return NextResponse.json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const updateClass = async (data, id) => {
+  try {
+    await Connect();
+
+    const teacherClass = await ClassModel.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Class updated successfully.",
+      data: { class: serializeMongooseDocument(teacherClass) },
+    });
+  } catch (error) {
+    console.log("Error in updateClass :: ", error);
+    return NextResponse.json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const deleteClass = async (id) => {
+  try {
+    await Connect();
+
+    const teacherClass = await ClassModel.findByIdAndDelete(id);
+
+    return NextResponse.json({
+      success: true,
+      message: "Class deleted successfully.",
+      class: serializeMongooseDocument(teacherClass),
+    });
+  } catch (error) {
+    console.log("Error in deleteClass :: ", error);
     return NextResponse.json({
       success: false,
       message: "Internal server error",
