@@ -22,7 +22,7 @@ const AssignmentDetailPage = async ({ id }) => {
 
   const session = await getServerSession(authOptions);
 
-  const { teacher, submissions, ...assignment } = data;
+  const { teacher, submissions, class_id, ...assignment } = data;
 
   const isTeacher = session.user?.id == teacher[0]?._id;
 
@@ -79,6 +79,7 @@ const AssignmentDetailPage = async ({ id }) => {
                     assignment={assignment.assignment}
                     criteria={assignment.criteria}
                     assignmentId={id}
+                    class_id={class_id}
                   />
                 )}
               </>

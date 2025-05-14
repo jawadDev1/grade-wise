@@ -8,7 +8,7 @@ const DashboardPage = async () => {
   const { classes } = await classesRes.json();
 
   return (
-    <main className="min-h-screen px-8 py-12 bg-gray-50">
+    <main className="min-h-screen px-8 py-12 ">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-primary">My Dashboard</h1>
       </div>

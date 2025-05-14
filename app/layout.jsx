@@ -1,37 +1,42 @@
-import { Poppins } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import NextTopLoader from "nextjs-toploader";
 import AuthProvider from "@/context/AuthProvider";
+import NextTopLoader from "nextjs-toploader";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-export const metadata = {
-  title: "GradeWise",
-  description:
-    "GradeWise is a platform for students to find and share class notes.",
+const Layout = ({ title, children }) => {
+  return (
+    <>
+      <html>
+        <head>
+          <meta charSet="UTF-8" />
+          <meta name="viewport" content="width=device-width" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <meta name="generator" content="Next.js" />
+          <meta
+            name="description"
+            content="AgenceX - SEO Agency website landing page made with Next.js and TailwindCSS"
+          />
+          <title>GradeWise</title>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body className="overflow-hidden overflow-y-auto bg-body">
+          <NextTopLoader
+            color="#3874FF"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={4}
+            crawl={true}
+            showSpinner={false}
+            easing="ease"
+            speed={200}
+          />
+          <AuthProvider>{children}</AuthProvider>
+        </body>
+      </html>
+    </>
+  );
 };
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={poppins.className}>
-        <AuthProvider>{children}</AuthProvider>
-        <NextTopLoader
-          color="#222222"
-          initialPosition={0.08}
-          crawlSpeed={200}
-          height={4}
-          crawl={true}
-          showSpinner={false}
-          easing="ease"
-          speed={200}
-        />
-        <Toaster />
-      </body>
-    </html>
-  );
-}
+export default Layout;

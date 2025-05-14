@@ -9,7 +9,7 @@ import { Button } from "./button";
 import { useRouter } from "next/navigation";
 import { cn, notifySuccess } from "@/lib/utils";
 
-const AssignmentUpload = ({ assignment, criteria, assignmentId }) => {
+const AssignmentUpload = ({ assignment, criteria, assignmentId, class_id }) => {
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -39,6 +39,7 @@ const AssignmentUpload = ({ assignment, criteria, assignmentId }) => {
         studentFile: data.data,
         criteria,
         assignment_id: assignmentId,
+        class_id
       });
 
       setLoading(false);

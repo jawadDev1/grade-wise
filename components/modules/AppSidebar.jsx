@@ -29,6 +29,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import SignOut from "../ui/SignOut";
+import TextGradient from "../shared/TextGradient";
 
 // Define menu items for each role
 const menuItems = {
@@ -88,7 +89,7 @@ export async function AppSidebar() {
           <NextLink href="/">
             <SidebarGroupLabel className="text-lg flex items-center gap-3 mb-3">
               <NextImage className="w-12 h-12" src="/icons/logo.svg" />
-              <Typography>GradeWise</Typography>
+              <TextGradient className={'text-xl font-bold'}>GradeWise</TextGradient>
             </SidebarGroupLabel>
           </NextLink>
           <SidebarGroupContent className="grow">

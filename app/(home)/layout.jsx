@@ -1,16 +1,19 @@
-import Navbar from "@/components/common/Navbar/Index";
 
-export const metadata = {
-  title: "GradeWise",
-  description:
-    "GradeWise is a platform for students to find and share class notes.",
-};
+import Navbar from "@/components/elements/Navbar";
+import Footer from "@/components/elements/Footer";
 
-export default function RootLayout({ children }) {
+const Layout = ({ children }) => {
+  
+
   return (
     <>
-      <Navbar />
-      {children}
+      
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      
     </>
   );
-}
+};
+
+export default Layout;

@@ -148,13 +148,15 @@ export default function ClassDetailPage({ classDetail }) {
 
         <TabsContent value="students">
           <div className="space-y-4">
-            {students.map((student) => (
+            {students.map(({ submitted = 0, ...student }) => (
               <Card
                 key={student._id}
                 className="hover:shadow-md transition-shadow"
               >
                 <CardContent className="p-4">
                   <p className="text-lg font-medium">{student.name}</p>
+                  <p>Total: {assignments.length}</p>
+                  <p>Submitted: {submitted.length}</p>
                 </CardContent>
               </Card>
             ))}

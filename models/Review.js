@@ -3,8 +3,8 @@ import { Schema, model, models } from "mongoose";
 const ReviewSchema = new Schema(
   {
     review: { type: String, required: true },
-    assignment_id: { type: Schema.Types.ObjectId, ref: "assignments" },
-    class_id: { type: Schema.Types.ObjectId, ref: "classes" },
+    assignment_id: { type: Schema.Types.ObjectId, ref: "Assignment" },
+    class_id: { type: Schema.Types.ObjectId, ref: "Class" },
     marks: {
       plagiarism: { type: Number, default: 0 },
       relevance: { type: Number, default: 0 },

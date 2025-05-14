@@ -287,7 +287,23 @@ export const getClassDetails = async (id) => {
     const pipeline = [
       {
         $match: {
-          _id: new mongoose.mongo.ObjectId(id),
+          _id: new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: "assignments",
+          localField: "_id",
+          foreignField: "class_id",
+          as: "assignments",
+        },
+      },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "class_id",
+          as: "reviews",
         },
       },
       {
@@ -299,16 +315,36 @@ export const getClassDetails = async (id) => {
         },
       },
       {
-        $lookup: {
-          from: "assignments",
-          localField: "_id",
-          foreignField: "class_id",
-          as: "assignments",
+        $addFields: {
+          students: {
+            $map: {
+              input: "$students",
+              as: "student",
+              in: {
+                $mergeObjects: [
+                  "$$student",
+                  {
+                    submitted: {
+                      $filter: {
+                        input: "$reviews",
+                        as: "review",
+                        cond: {
+                          $eq: ["$$review.student_id", "$$student._id"],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
         },
       },
     ];
 
     const classDetail = await ClassModel.aggregate(pipeline);
+
+    console.log("Sutde ======> ", classDetail[0]["students"][1]);
 
     return NextResponse.json({
       success: true,

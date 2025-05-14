@@ -64,6 +64,7 @@ export const REVIEW_ASSIGNMENT = async ({
   studentFile,
   criteria,
   assignment_id,
+  class_id
 }) => {
   "use server";
   const assignmentText = await parseText(assignment);
@@ -82,6 +83,7 @@ export const REVIEW_ASSIGNMENT = async ({
     marks,
     student_id: session?.user.id,
     student_assignment: studentFile,
+    class_id
   };
 
   await SERVICES.AIService.createReview(data);

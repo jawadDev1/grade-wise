@@ -40,16 +40,22 @@ export function FileUpload({ form, field }) {
     <div className="flex flex-col w-full">
       <Label className="text-sm font-medium">Assignment File</Label>
       <div className="flex gap-3 w-full">
-        <Input
-          type="text"
-          readOnly
-          value={file.name || field?.value || ""}
-          placeholder="No file chosen"
-          className="bg-white border flex-1 border-gray-300 rounded-md px-3 py-4 focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-
+        <div>
+          <Input
+            type="text"
+            readOnly
+            value={file.name || field?.value || ""}
+            placeholder="No file chosen"
+            className="bg-white border flex-1 border-gray-300 rounded-md px-3 py-4 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <span className="text-xs text-red-600 mt-2">
+            {form?.formState.errors?.assignment &&
+              form?.formState.errors?.assignment.message}
+          </span>
+        </div>
         <Label className="flex justify-center  items-center px-4 py-1 h-fit border border-gray-300 text-gray-700 rounded cursor-pointer">
           {file?.name ? "Change File" : "Select File"}
+
           <input
             type="file"
             className="hidden"

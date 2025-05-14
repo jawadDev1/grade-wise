@@ -1,18 +1,21 @@
-import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";;
-import React from "react";
+import Link from "next/link";
 
-const ClassCard = ({ cls}) => {
+import React from "react";
+import Paragraph from "../shared/Paragraph";
+
+const ClassCard = ({ cls }) => {
   return (
-    <Link  href={`/dashboard/classes/${cls._id}`}>
-      <Card className="hover:shadow-xl transition-shadow">
-        <CardHeader>
-          <CardTitle>{cls.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-600 text-sm line-clamp-3 " >{cls.description}</p>
-        </CardContent>
-      </Card>
+    <Link
+      href={`/dashboard/classes/${cls._id}`}
+      className="p-2 sm:p-6 lg:p-5 rounded-3xl border border-box-border bg-box-bg shadow-lg shadow-box-shadow relative overflow-hidden"
+    >
+      <div className=" space-y-4 relative">
+        <h2 className="text-lg md:text-xl font-semibold text-heading-2 hover:text-blue-700">
+          {cls.name}
+        </h2>
+
+        <Paragraph>{cls.description}</Paragraph>
+      </div>
     </Link>
   );
 };
