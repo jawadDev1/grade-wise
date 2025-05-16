@@ -15,7 +15,7 @@ function getTextColor(variant) {
   return "text-primary";
 }
 
-const BtnLink = ({ href, text, className = "", variant }) => {
+const BtnLink = ({ href, text, className = "", variant = 'primary' }) => {
   return (
     <Link
       href={href}

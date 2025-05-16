@@ -68,7 +68,6 @@ export default function AssignmentForm({
             .number()
             .min(1, "Content Quality marks is required"),
         }),
-        students: z.array(z.string()).min(1, "Choose atleast 1 student."),
       })
     ),
     defaultValues,
@@ -89,7 +88,7 @@ export default function AssignmentForm({
   };
 
   return (
-    <Card className="max-w-2xl mx-auto p-6">
+    <div className="rounded-3xl max-w-[900px] mx-auto flex flex-col border border-box-border bg-transparent shadow-lg shadow-box-shadow relative overflow-hidden">
       <CardHeader>
         <CardTitle className="text-2xl text-center">
           {type} Assignment
@@ -121,7 +120,7 @@ export default function AssignmentForm({
                   <FormControl>
                     <textarea
                       {...field}
-                      className="w-full resize-none h-24 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full resize-none bg-transparent h-24 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </FormControl>
                   <FormMessage />
@@ -176,7 +175,7 @@ export default function AssignmentForm({
               />
             ))}
 
-            <div>
+            {/* <div>
               <FormField
                 control={form.control}
                 name="students"
@@ -199,7 +198,7 @@ export default function AssignmentForm({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             {/* <DevTool control={form.control} /> */}
             <Button type="submit" className="w-full">
               Assign
@@ -207,6 +206,6 @@ export default function AssignmentForm({
           </form>
         </Form>
       </CardContent>
-    </Card>
+    </div>
   );
 }

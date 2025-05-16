@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import Typography from "../common/Typography";
 import { Text } from "@radix-ui/themes";
 import NextLink from "../common/NextLink";
+import Paragraph from "../shared/Paragraph";
 
 export function ProgressCard({
   id,
@@ -22,21 +23,20 @@ export function ProgressCard({
   ...props
 }) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div
+      className="rounded-lg py-5 px-3 flex flex-col border border-box-border bg-box-bg shadow-lg shadow-box-shadow relative overflow-hidden"
+      {...props}
+    >
       <NextLink href={`/dashboard/progress/review/${id}`}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">{title}</CardTitle>
-            <CardDescription>
-              <Text className="line-clamp-3" as="p">
-                {review}
-              </Text>
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Typography variant={"h6"}>Marks: {marks}</Typography>
-          </CardContent>
-        </Card>
+        <div>
+          <h2 className="text-lg md:text-xl font-semibold text-heading-2 hover:text-blue-700">
+            {title}
+          </h2>
+
+          <Paragraph>{review}</Paragraph>
+
+          <Typography variant={"h6"}>Marks: {marks}</Typography>
+        </div>
       </NextLink>
     </div>
   );

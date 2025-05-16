@@ -14,6 +14,10 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
+    cover_img: {
+      type: String,
+      default: '/classes/bg-1.jpg'
+    },
     created_by: { type: Schema.Types.ObjectId, ref: "User" },
     students: [{ type: Schema.Types.ObjectId, ref: "User" }],
     assignments: [{ type: Schema.Types.ObjectId, ref: "assignments" }],

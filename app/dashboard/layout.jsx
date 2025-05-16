@@ -5,7 +5,7 @@ import { SERVICES } from "@/services";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
-import { Toaster } from "sonner";
+
 
 const Index = async ({ children }) => {
   const session = await getServerSession(authOptions);
@@ -21,7 +21,7 @@ const Index = async ({ children }) => {
 
     return (
       <SidebarProvider>
-        <Toaster richColors expand position="top-right" />
+        
         <AppSidebar />
         <main className="relative w-full h-screen p-3">
           <SidebarTrigger asChild />

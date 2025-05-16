@@ -44,7 +44,7 @@ const AssignmentUpload = ({ assignment, criteria, assignmentId, class_id }) => {
 
       setLoading(false);
       notifySuccess("Assignment submitted successfully");
-      router.push("/dashboard/progress");
+      // router.push("/dashboard/progress");
 
       return;
     } catch (error) {

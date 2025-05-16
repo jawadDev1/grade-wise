@@ -197,7 +197,8 @@ export const getStudents = async () => {
 export const createClass = async (data) => {
   try {
     await Connect();
-
+    const index = Math.floor(Math.random() * 12) + 1;
+    data.cover_img = `/classes/bg-${index}.jpg`;
     const teacherClass = await ClassModel.create(data);
 
     return NextResponse.json({
@@ -261,14 +262,23 @@ export const getClasses = async (id) => {
     await Connect();
 
     const { user } = await getServerSession(authOptions);
-    const classes = await ClassModel.find({
-      $or: [{ created_by: user?.id }, { students: { $in: [user?.id] } }],
-    });
+    const userId = new mongoose.Types.ObjectId(user?.id);
+    const classes = await ClassModel.aggregate([
+      {
+        $facet: {
+          teaching: [{ $match: { created_by: userId } }],
+          learning: [{ $match: { students: { $in: [userId] } } }],
+        },
+      },
+    ]);
 
     return NextResponse.json({
       success: true,
       message: "Classes fetched successfully.",
-      classes,
+      classes: {
+        teaching: classes[0]?.teaching,
+        learning: classes[0]?.learning,
+      },
     });
   } catch (error) {
     console.log("Error in getClasses :: ", error);
@@ -290,6 +300,7 @@ export const getClassDetails = async (id) => {
           _id: new mongoose.Types.ObjectId(id),
         },
       },
+
       {
         $lookup: {
           from: "assignments",
@@ -312,6 +323,14 @@ export const getClassDetails = async (id) => {
           localField: "students",
           foreignField: "_id",
           as: "students",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "created_by",
+          foreignField: "_id",
+          as: "createdBy",
         },
       },
       {
@@ -344,8 +363,6 @@ export const getClassDetails = async (id) => {
 
     const classDetail = await ClassModel.aggregate(pipeline);
 
-    console.log("Sutde ======> ", classDetail[0]["students"][1]);
-
     return NextResponse.json({
       success: true,
       message: "Classes fetched successfully.",
@@ -357,6 +374,55 @@ export const getClassDetails = async (id) => {
       success: false,
       message: "Internal server error",
       classDetail: {},
+    });
+  }
+};
+
+export const getClassStudentsIds = async (classId) => {
+  await Connect();
+  try {
+    const pipeline = [
+      {
+        $match: {
+          _id: new mongoose.mongo.ObjectId(classId),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "students",
+          foreignField: "_id",
+          as: "students",
+          pipeline: [{ $project: { _id: 1 } }],
+        },
+      },
+      {
+        $project: {
+          students: {
+            $map: {
+              input: "$students",
+              as: "s",
+              in: "$$s._id",
+            },
+          },
+          _id: 0,
+        },
+      },
+    ];
+
+    const students = await ClassModel.aggregate(pipeline);
+
+    return NextResponse.json({
+      success: true,
+      message: "students fetched successfully.",
+      students: students[0]?.students || [],
+    });
+  } catch (error) {
+    console.log("Error in getClassStudents :: ", error);
+    return NextResponse.json({
+      success: false,
+      message: "Internal server error",
+      students: [],
     });
   }
 };

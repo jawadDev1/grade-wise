@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import NextLink from "@/components/common/NextLink";
 import AssignmentActions from "@/components/ui/AssignmentActions";
+import BtnLink from "@/components/shared/BtnLink";
 
 const AssignmentDetailPage = async ({ id }) => {
   const response = await generateResponse(
@@ -26,18 +27,25 @@ const AssignmentDetailPage = async ({ id }) => {
 
   const isTeacher = session.user?.id == teacher[0]?._id;
 
+  const review =
+    submissions?.length > 0 &&
+    submissions.find((sub) => sub?.student_id === session.user?.id);
+
   const isPastDeadline = new Date() > new Date(assignment.deadline);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold mb-4">{assignment.title}</h1>
-        {isTeacher && <AssignmentActions id={id} />}
+        <div className=" flex justify-end items-center ">
+          {isTeacher && <AssignmentActions id={id} />}
+        </div>
       </div>
 
       <Tabs defaultValue="instructions">
         <TabsList className="mb-6">
           <TabsTrigger value="instructions">Instructions</TabsTrigger>
+          {review && <TabsTrigger value="review">Review</TabsTrigger>}
           {isTeacher ? (
             <TabsTrigger value="submissions">Student Submissions</TabsTrigger>
           ) : null}
@@ -62,14 +70,13 @@ const AssignmentDetailPage = async ({ id }) => {
               ))}
             </ul>
 
-            {!isTeacher && (
+            <Button variant="secondary">
+              <a href={assignment.assignment} download>
+                Download Assignment
+              </a>
+            </Button>
+            {!isTeacher && !review && (
               <>
-                <Button variant="secondary">
-                  <a href={assignment.assignment} download>
-                    Download Assignment
-                  </a>
-                </Button>
-
                 {isPastDeadline ? (
                   <p className="text-red-500">
                     Deadline passed. You can no longer submit.
@@ -103,13 +110,61 @@ const AssignmentDetailPage = async ({ id }) => {
                       </p>
                       <p>{formatMarks(assignment.criteria, sub.marks)}</p>
                     </div>
-                    <Button size="sm" variant="outline">
-                      View Submission
-                    </Button>
+                    <BtnLink
+                      href={`/dashboard/progress/review/${sub?._id}`}
+                      variant="primary"
+                      text={"View submission"}
+                      className="h-fit rounded-md "
+                    />
                   </div>
                 ))
               ) : (
                 <p>No student submissions yet.</p>
+              )}
+            </div>
+          </TabsContent>
+        )}
+
+        {review && (
+          <TabsContent value="review">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <p>
+                  <strong>Review:</strong>
+                </p>
+                <p>{review?.review}</p>
+              </div>
+              <p>
+                <strong>Marks:</strong>
+              </p>
+              <ul className="list-disc ml-6">
+                {Object?.entries(review?.marks).map(([key, value]) => (
+                  <li key={key} className="capitalize">
+                    {key}: {value} Marks
+                  </li>
+                ))}
+              </ul>
+
+              <Button variant="secondary">
+                <a href={review.student_assignment} download>
+                  Download Submission
+                </a>
+              </Button>
+              {!isTeacher && !review && (
+                <>
+                  {isPastDeadline ? (
+                    <p className="text-red-500">
+                      Deadline passed. You can no longer submit.
+                    </p>
+                  ) : (
+                    <AssignmentUpload
+                      assignment={assignment.assignment}
+                      criteria={assignment.criteria}
+                      assignmentId={id}
+                      class_id={class_id}
+                    />
+                  )}
+                </>
               )}
             </div>
           </TabsContent>

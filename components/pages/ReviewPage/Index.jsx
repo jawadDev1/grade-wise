@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,7 +9,7 @@ import {
 
 import { generateResponse } from "@/helpers/generateResponse";
 import { SERVICES } from "@/services";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 const ReviewPage = async ({ id }) => {
   const response = await generateResponse(
@@ -17,32 +18,40 @@ const ReviewPage = async ({ id }) => {
 
   const { data } = await response.json();
 
-  //   if (!data) redirect("/");
+  if (!data) notFound();
 
-  const { title, review, marks } = data;
+  const { title, review, marks, student_assignment } = data;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-semibold">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className=" text-gray-600">{review}</CardDescription>
+    <div className="rounded-xl py-6 px-5 max-w-[800px] mx-auto flex flex-col border border-box-border bg-box-bg shadow-lg shadow-box-shadow relative overflow-hidden">
+      <h2 className="text-lg md:text-xl font-semibold text-heading-2 hover:text-blue-700">
+        {title}
+      </h2>
 
-          <div className="mt-2 text-sm text-gray-500 font-medium">
-            <span className="font-bold text-gray-900">Marks:</span>
-            <ul className="list-disc pl-6 mt-2">
-              {Object.entries(marks).map(([key, value]) => (
-                <li key={key} className="text-gray-600">
-                  {key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ")}
-                  : {value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-4 mt-4">
+        <div className="space-y-2">
+          <p>
+            <strong>Review:</strong>
+          </p>
+          <p>{review}</p>
+        </div>
+        <p>
+          <strong>Marks:</strong>
+        </p>
+        <ul className="list-disc ml-6">
+          {Object?.entries(marks).map(([key, value]) => (
+            <li key={key} className="capitalize">
+              {key}: {value} Marks
+            </li>
+          ))}
+        </ul>
+
+        <Button variant="secondary">
+          <a href={student_assignment} download>
+            Download Submission
+          </a>
+        </Button>
+      </div>
     </div>
   );
 };

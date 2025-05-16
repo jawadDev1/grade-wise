@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, notifyError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -51,8 +51,10 @@ export function LoginForm({ className, handleFormChange, ...props }) {
         ...data,
       });
 
-      if (response && response.error && response.status === 401)
+      if (response && response.error && response.status === 401) {
+        notifyError("Invalid credentials");
         throw new Error(response.error);
+      }
       toast({
         title: "Signed In successfully.",
         description: "You are now logged in.",

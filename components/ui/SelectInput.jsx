@@ -58,13 +58,14 @@ export const StudentMultiSelect = ({
           name={name}
           options={data}
           value={initialValues}
-          className="focus:z-20"
+          className="focus:z-20 bg-transparent"
           onChange={(option) => handleChange(option)}
           isMulti={true}
+          styles={{ backgroundColor: 'red' }}
           {...props}
         />
       ) : (
-        <div className="h-10 w-full rounded-md border border-gray-200 bg-gray-50 animate-pulse" />
+        <div className="h-10 w-full rounded-md border border-gray-200 bg-transparent animate-pulse" />
       )}
       {error && <Text as="p" className="text-red-600" {...{ error }} />}
     </>

@@ -1,11 +1,13 @@
+import { ThemeProvider } from "@/components/themeProvider";
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 
-const Layout = ({ title, children }) => {
+const Layout = ({ children }) => {
   return (
     <>
-      <html>
+      <html suppressHydrationWarning>
         <head>
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width" />
@@ -22,6 +24,7 @@ const Layout = ({ title, children }) => {
           />
         </head>
         <body className="overflow-hidden overflow-y-auto bg-body">
+          <Toaster richColors expand position="top-right" />
           <NextTopLoader
             color="#3874FF"
             initialPosition={0.08}
@@ -32,7 +35,15 @@ const Layout = ({ title, children }) => {
             easing="ease"
             speed={200}
           />
-          <AuthProvider>{children}</AuthProvider>
+
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
         </body>
       </html>
     </>

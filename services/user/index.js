@@ -47,6 +47,32 @@ export const getClassStudents = async (id) => {
   try {
     await Connect();
 
+    // const pipeline = [
+    //   {
+    //     $match: {
+    //       _id: new mongoose.mongo.ObjectId(id),
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "users",
+    //       localField: "students",
+    //       foreignField: "_id",
+    //       as: "students",
+    //       pipeline: [
+    //         { $addFields: { label: "$$ROOT.name", value: "$$ROOT._id" } },
+    //         { $project: { label: 1, value: 1 } },
+    //       ],
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       students: 1,
+    //       _id: 0,
+    //     },
+    //   },
+    // ];
+
     const pipeline = [
       {
         $match: {
@@ -59,15 +85,18 @@ export const getClassStudents = async (id) => {
           localField: "students",
           foreignField: "_id",
           as: "students",
-          pipeline: [
-            { $addFields: { label: "$$ROOT.name", value: "$$ROOT._id" } },
-            { $project: { label: 1, value: 1 } },
-          ],
+          pipeline: [{ $project: { _id: 1 } }],
         },
       },
       {
         $project: {
-          students: 1,
+          students: {
+            $map: {
+              input: "$students",
+              as: "s",
+              in: "$$s._id",
+            },
+          },
           _id: 0,
         },
       },

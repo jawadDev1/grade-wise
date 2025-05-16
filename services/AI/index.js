@@ -132,13 +132,11 @@ export const getStudentReviews = async () => {
 
 export const getReviewDetails = async (id) => {
   await Connect();
-  const session = await getServerSession(authOptions);
 
   const pipeline = [
     {
       $match: {
         _id: new mongoose.mongo.ObjectId(id),
-        student_id: new mongoose.mongo.ObjectId(session.user.id),
       },
     },
     {
